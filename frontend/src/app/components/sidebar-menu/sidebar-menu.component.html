@@ -1,0 +1,16 @@
+<div class="sticky top-0 z-40 h-screen w-16 bg-neutral-900 text-gray-400 flex flex-col py-12 gap-28">
+	<div *ngFor="let cat of categories"
+		[routerLink]="['/', cat.value]"
+		routerLinkActive="text-red-600"
+    	[routerLinkActiveOptions]="{ exact: true }"
+		class="flex items-center justify-center group relative transition-colors duration-300 cursor-pointer">
+		<span
+			class="absolute top-1/2 left-3/4 -translate-y-1/2 ml-2 text-lg font-light tracking-widest whitespace-nowrap transition-opacity duration-300
+             opacity-0 group-hover:opacity-100
+             group-[.text-red-600]:opacity-100"
+      		style="writing-mode: vertical-rl; transform: translateY(-50%) rotate(180deg);">
+			{{ cat.label }}
+		</span>
+		<span class="text-2xl font-bold transition-transform duration-300 group-hover:scale-125">{{ cat.label[0] }}</span>
+	</div>
+</div>

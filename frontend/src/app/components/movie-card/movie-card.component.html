@@ -1,0 +1,63 @@
+<div [routerLink]="['/movie', movie.id]"
+  class="relative flex bg-neutral-300 shadow-md rounded-lg overflow-hidden transition-all duration-200 cursor-pointer hover:shadow-lg hover:brightness-[0.96]">
+  
+  <img
+    [src]="movie.posterUrl"
+    [alt]="movie.title"
+    class="w-28 sm:w-32 md:w-36 object-cover"
+  />
+
+  <div class="p-3 flex flex-col justify-between flex-1">
+    <div>
+      <h3 class="text-base tracking-wide font-semibold text-gray-800 truncate">
+        {{ movie.title }}
+      </h3>
+      <p class="text-sm text-gray-600">
+        {{ movie.year }}
+        <span *ngIf="movie.language"> | {{ movie.language | uppercase }}</span>
+        <span *ngIf="movie.adult"> | 🔞</span>
+      </p>
+      <p class="text-sm font-semibold text-indigo-600">
+        ⭐ {{ movie.rating }}
+      </p>
+
+      <p class="text-sm text-gray-700 line-clamp-3 mt-1">
+        {{ movie.description }}
+      </p>
+
+      <p class="text-sm text-gray-500 mt-1" *ngIf="movie.popularity">
+        Popularity: {{ movie.popularity | number:'1.0-0' }}
+      </p>
+    </div>
+
+    <div class="flex gap-2 mt-2">
+      <app-movie-action-button
+        label="Favourite"
+        [active]="isFavourite()"
+        [inactiveColor]="'red-600'"
+        [activeColor]="'green-600'"
+        [inactivePath]="'M3 8l7.5 8L21 8H3z'"
+        [activePath]="'M3 8l7.5 8L21 8H3z'"
+        [pillBackgroundInactive]="'text-red-600'"
+        [pillBackgroundActive]="'bg-green-100 text-green-700'"
+        [hoverClassInactive]="'hover:bg-gray-200'"
+        [hoverClassActive]="'hover:bg-green-200'"
+        (clicked)="toggleFavourite()"
+      ></app-movie-action-button>
+
+      <app-movie-action-button
+        label="Watchlist"
+        [active]="isInWatchlist()"
+        [inactiveColor]="'yellow-500'"
+        [activeColor]="'green-600'"
+        [inactivePath]="'M5 4h14v16l-7-4-7 4V4z'"
+        [activePath]="'M5 4h14v16l-7-4-7 4V4z'"
+        [pillBackgroundInactive]="'text-yellow-600'"
+        [pillBackgroundActive]="'bg-green-100 text-green-700'"
+        [hoverClassInactive]="'hover:bg-gray-200'"
+        [hoverClassActive]="'hover:bg-green-200'"
+        (clicked)="toggleWatchlist()"
+      ></app-movie-action-button>
+    </div>
+  </div>
+</div>

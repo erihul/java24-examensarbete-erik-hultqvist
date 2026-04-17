@@ -1,0 +1,18 @@
+<div class="flex flex-col h-screen overflow-hidden">
+  <p-toast position="top-center"></p-toast>
+  <header class="fixed top-0 left-0 right-0 z-50">
+    <app-header></app-header>
+  </header>
+  <main class="flex pt-[70px] h-full bg-neutral-900">
+    <aside class="fixed top-[70px] left-0 w-16 h-[calc(100vh-70px)] py-8 z-40">
+      <app-sidebar-menu></app-sidebar-menu>
+    </aside>
+    <section class="flex-1 overflow-auto pl-8">
+      <div class="max-w-screen-2xl mx-auto px-24 py-10">
+        <router-outlet></router-outlet>
+      </div>
+    </section>
+  </main>
+</div>
+
+

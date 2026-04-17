@@ -1,0 +1,19 @@
+<section class="grid gap-6 grid-cols-1 sm:grid-cols-2">
+	<app-movie-card
+		*ngFor="let movie of movies; trackBy: trackByMovie"
+		[movie]="movie"
+		(addToFavourites)="addToFavourites.emit($event)"
+		(addToWatchList)="addToWatchList.emit($event)">
+	</app-movie-card>
+</section>
+
+<div class="flex justify-center mt-8">
+	<button
+		(click)="loadMore.emit()"
+		class="px-6 py-2 rounded-lg font-semibold transition
+			bg-gray-800 text-gray-200
+			hover:bg-red-800 hover:text-white
+			disabled:opacity-50 disabled:hover:bg-gray-800 disabled:hover:text-gray-200">
+		{{ isLoading ? 'Loading…' : 'Load more' }}
+	</button>
+</div>

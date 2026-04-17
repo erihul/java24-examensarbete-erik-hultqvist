@@ -1,0 +1,214 @@
+<section
+	*ngIf="movie() as movie" class="relative w-full h-[88vh] bg-cover bg-center" 
+		[style.backgroundImage]="'url(' + movie.backdropUrl + ')'">
+	<div class="absolute inset-0 bg-black/60">
+		<h1 class="text-6xl text-zinc-300 font-bold mb-2 p-8">
+		{{ movie.title }}
+		</h1>
+	</div>
+	<div class="relative z-10 h-full flex items-end justify-between pb-8 max-w-screen-2xl mx-auto px-10 w-full">
+		<div class="text-white max-w-3xl">
+			<div class="mt-3 text-lg text-gray-300">
+				{{ movie.genres?.join(', ') }}
+			</div>
+			<div class="flex items-center gap-3 text-base font-semibold text-gray-200">
+				<span *ngIf="movie.year">{{ movie.year }}</span>
+				<span *ngIf="movie.year && (movie.runtime || movie.rating)">•</span>
+				<span *ngIf="movie.runtime">{{ movie.runtime }} min</span>
+				<span *ngIf="movie.runtime && movie.rating">•</span>
+
+				<span *ngIf="movie.rating" class="flex items-center gap-1 text-yellow-400">
+				⭐ {{ movie.rating | number:'1.1-1' }}
+				</span>
+			</div>
+		</div>
+		<div class="flex flex-col gap-4 items-end">
+		<app-movie-action-button 
+			label="Favourite"
+			[active]="isFavourite()"
+			[inactiveColor]="'red-600'"
+			[activeColor]="'green-600'"
+			[inactivePath]="'M3 8l7.5 8L21 8H3z'"
+			[activePath]="'M3 8l7.5 8L21 8H3z'"
+			[pillBackgroundInactive]="'text-red-700 bg-white/10'"
+			[pillBackgroundActive]="'bg-green-100 text-green-700'"
+			[hoverClassInactive]="'hover:text-red-600 hover:bg-white/30'"
+			[hoverClassActive]="'hover:bg-green-200'"
+			(clicked)="toggleFavourite()"
+		></app-movie-action-button>
+		<app-movie-action-button
+			label="Watchlist"
+			[active]="isInWatchlist()"
+			[inactiveColor]="'yellow-500'"
+			[activeColor]="'green-600'"
+			[inactivePath]="'M5 4h14v16l-7-4-7 4V4z'"
+			[activePath]="'M5 4h14v16l-7-4-7 4V4z'"
+			[pillBackgroundInactive]="'text-yellow-600 bg-white/10'"
+			[pillBackgroundActive]="'bg-green-100 text-green-700'"
+			[hoverClassInactive]="'hover:text-yellow-500 hover:bg-white/30'"
+			[hoverClassActive]="'hover:bg-green-200'"
+			(clicked)="toggleWatchlist()"
+		></app-movie-action-button>
+		</div>
+	</div>
+</section>
+
+<section *ngIf="movie() as movie" class="container mx-auto px-4 py-12">
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <div class="lg:col-span-1">
+      <img
+        class="rounded-lg shadow-lg w-full"
+        [src]="movie.posterUrl"
+        [alt]="movie.title"
+      />
+    </div>
+    <div class="lg:col-span-3 space-y-8">
+      <div>
+        <p *ngIf="movie.tagline" class="text-xl italic text-zinc-400 mb-4 font-light">
+          "{{ movie.tagline }}"
+        </p>
+        <h2 class="text-2xl font-bold mb-3 text-white">Overview</h2>
+        <p class="leading-relaxed text-base text-zinc-300">
+          {{ movie.description }}
+        </p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div *ngIf="movie.budget" class="bg-neutral-800/60 p-3 rounded-lg">
+          <p class="text-xs text-zinc-400 font-medium mb-1">Budget</p>
+          <p class="text-base font-bold text-white">{{ movie.budget | currency:'USD':'symbol':'1.0-0' }}</p>
+        </div>
+        <div *ngIf="movie.revenue" class="bg-neutral-800/60 p-3 rounded-lg">
+          <p class="text-xs text-zinc-400 font-medium mb-1">Revenue</p>
+          <p class="text-base font-bold text-white">{{ movie.revenue | currency:'USD':'symbol':'1.0-0' }}</p>
+        </div>        
+        <div *ngIf="movie.popularity" class="bg-neutral-800/60 p-3 rounded-lg">
+          <p class="text-xs text-zinc-400 font-medium mb-1">Popularity</p>
+          <p class="text-base font-bold text-white">{{ movie.popularity | number:'1.0-0' }}</p>
+        </div>       
+        <div *ngIf="movie.status" class="bg-neutral-800/60 p-3 rounded-lg">
+          <p class="text-xs text-zinc-400 font-medium mb-1">Status</p>
+          <p class="text-base font-bold text-white">{{ movie.status }}</p>
+        </div>
+      </div>
+      <div *ngIf="movie.homepage">
+        <a
+          [href]="movie.homepage"
+          target="_blank"
+          class="inline-flex items-center gap-2 text-indigo-400 text-base font-semibold hover:text-indigo-300 hover:underline"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+          Official Website
+        </a>
+      </div>
+      <div *ngIf="movie.productionCompanies?.length" class="pt-6">
+        <h3 class="text-2xl font-bold mb-4 text-white">Production</h3>
+        <div class="flex flex-wrap gap-4">
+          <div *ngFor="let c of movie.productionCompanies" 
+               class="flex items-center gap-3 bg-zinc-400/60 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+            <div class="h-16 w-16 flex items-center justify-center flex-shrink-0">
+              <img *ngIf="c.logoUrl" 
+                   [src]="c.logoUrl" 
+                   [alt]="c.name"  
+                   class="max-h-full max-w-full object-contain" />
+              <div *ngIf="!c.logoUrl" 
+                   class="text-zinc-400 text-xs text-center font-semibold leading-tight">
+                {{ c.name }}
+              </div>
+            </div>
+            <div class="flex flex-col">
+              <p class="text-xs font-semibold text-zinc-100">{{ c.name }}</p>
+              <p *ngIf="c.originCountry" class="text-xs text-zinc-300">{{ c.originCountry }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section *ngIf="movie() as movie" class="container mx-auto px-4 pb-12">
+  <div *ngIf="movie.director || movie.actors?.length">
+    <h3 class="text-2xl font-bold mb-6 text-white">Cast & Crew</h3>
+    <div *ngIf="movie.director" class="mb-6 bg-neutral-800/60 p-4 pl-6 pr-8 rounded-lg inline-block">
+      <p class="text-xs font-medium text-zinc-400 mb-1">Director</p>
+      <p class="text-base font-bold text-white">{{ movie.director.name }}</p>
+    </div>
+    <div *ngIf="movie.actors?.length">
+      <h4 class="text-lg font-semibold text-zinc-200 mb-4">Top Cast</h4>
+      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
+        <div *ngFor="let a of movie.actors" class="text-center group">
+          <div class="aspect-[2/3] bg-gray-200 rounded-lg overflow-hidden mb-2 shadow-sm group-hover:shadow-md transition-shadow">
+            <img *ngIf="a.profileUrl" 
+                 [src]="a.profileUrl" 
+                 [alt]="a.name"
+                 class="w-full h-full object-cover" />
+            <div *ngIf="!a.profileUrl" 
+                 class="w-full h-full flex items-center justify-center text-gray-400">
+              <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          </div>
+          <p class="font-semibold text-xs leading-tight mb-1 text-zinc-200">{{ a.name }}</p>
+          <p class="text-xs text-zinc-400 line-clamp-2">{{ a.character }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section *ngIf="trailerUrl()" class="container mx-auto px-4 pb-12">
+  <h2 class="text-2xl font-semibold mb-4 text-white">Trailer</h2>
+  <div class="aspect-video">
+    <iframe
+      class="w-full h-full rounded-lg"
+      [src]="trailerUrl()"
+      frameborder="0"
+      allowfullscreen
+    ></iframe>
+  </div>
+</section>
+
+<section *ngIf="movie() as movie" class="container mx-auto px-4 pb-12">
+  <section *ngIf="movie.reviews?.length">
+    <h3 class="text-2xl font-semibold mb-4 text-white">User Reviews</h3>
+    <div class="space-y-6">
+      <article *ngFor="let r of movie.reviews" 
+               class="bg-neutral-800/60 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow">
+        <div class="flex items-center gap-3 mb-3">
+          <img *ngIf="r.authorDetails.avatarUrl" 
+               [src]="r.authorDetails.avatarUrl"
+               [alt]="r.author"
+               class="w-10 h-10 rounded-full object-cover" />
+          <div *ngIf="!r.authorDetails.avatarUrl"
+               class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold text-base">
+            {{ r.author.charAt(0).toUpperCase() }}
+          </div>       
+          <div class="flex-1">
+            <p class="font-semibold text-sm text-white">{{ r.author }}</p>
+            <div class="flex items-center gap-2 text-xs text-zinc-400">
+              <span>{{ r.createdAt | date:'medium' }}</span>
+              <span *ngIf="r.authorDetails.rating" class="flex items-center gap-1 text-yellow-400">
+                ⭐ {{ r.authorDetails.rating }}/10
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="prose max-w-none">
+          <p class="text-sm text-zinc-300 leading-relaxed whitespace-pre-line line-clamp-6">
+            {{ r.content }}
+          </p>
+        </div>
+        <a *ngIf="r.url" 
+           [href]="r.url" 
+           target="_blank"
+           class="inline-block mt-3 text-indigo-400 hover:text-indigo-300 text-xs font-medium">
+          Read full review →
+        </a>
+      </article>
+    </div>
+  </section>
+</section>

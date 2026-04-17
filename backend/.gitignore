@@ -1,0 +1,22 @@
+# Build output
+target/
+
+# Secrets - never commit
+src/main/resources/application.properties
+
+# IDE
+.idea/
+*.iml
+*.xml
+!pom.xml
+
+# Maven wrapper (optional, some projects commit this)
+.mvn/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db

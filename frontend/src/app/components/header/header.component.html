@@ -1,0 +1,70 @@
+<p-menubar
+	[style]="{ height: isScrolled ? '50px' : '70px' }"
+	styleClass="!w-full !bg-gradient-to-b !from-neutral-800 !to-neutral-900
+				!border-b !border-none !rounded-none
+				!transition-all !duration-300"
+	[ngClass]="{ '!backdrop-blur !bg-gray-700/50 !shadow-lg': isScrolled }">
+	
+	<ng-template pTemplate="start">
+		<div class="w-full max-w-screen-2xl mx-auto px-28 flex items-center">
+		<a [routerLink]="['/now_playing']"
+			class="flex items-center gap-1 text-white cursor-pointer select-none group transition-transform duration-300"
+			[class.scale-95]="isScrolled">
+			<div class="w-10 h-10 rounded-full bg-gradient-to-br from-red-800 to-red-950 flex items-center justify-center shadow-lg">
+			<svg class="w-6 h-6 text-red-300 group-hover:text-red-400 transition-colors duration-500"
+				viewBox="0 0 24 24"
+				fill="currentColor">
+				<path d="M3 20V4h4l5 9 5-9h4v16h-3V9l-6 11L6 9v11H3z"/>
+			</svg>
+			</div>
+			<span class="text-xl font-bold tracking-[0.4em] uppercase text-zinc-200">ovie Dept.</span>
+		</a>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="end">
+		<div class="w-full max-w-screen-2xl mx-auto px-20 flex items-center justify-end gap-6 cursor-pointer">
+			<p-button (click)="op.toggle($event)" icon="pi pi-search" label="Search"
+				styleClass="!bg-transparent !border-none [&_.p-button-label]:text-gray-400 [&_.p-button-icon]:text-gray-400
+    				[&:hover_.p-button-label]:text-white [&:hover_.p-button-icon]:text-white transition-colors"/>
+			<p-popover #op>
+				<form action="" (ngSubmit)="onSearchSubmit()">
+					<input pInputText id="search" [formControl]="searchControl" type="text" autocomplete="on" placeholder="Search Movie Dept."/>
+					<p-button type="submit" [rounded]="true" [text]="true" icon="pi pi-search" />
+				</form>
+			</p-popover>	
+
+			<a [routerLink]="['/favourites']" (click)="checkAuth($event)" routerLinkActive="text-white"
+				class="flex items-center gap-1 transition group hover:text-white text-lg text-gray-400">
+				<svg class="w-5 h-5 stroke-current text-red-600 group-hover:text-red-500 transition-colors duration-300"
+					fill="none" stroke-width="2" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.5 8L21 8H3z"/>
+				</svg>
+				Favourites
+			</a>
+
+			<a [routerLink]="['/watchlist']" (click)="checkAuth($event)" routerLinkActive="text-white"
+				class="flex items-center gap-1 transition group hover:text-white text-lg text-gray-400 cursor-pointer">
+				<svg class="w-5 h-5 stroke-current text-yellow-500 group-hover:text-yellow-400 transition-colors duration-300"
+					fill="none" stroke-width="2" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M5 4h14v16l-7-4-7 4V4z"/>
+				</svg>
+				Watchlist
+			</a>
+
+			<button class="flex items-center gap-1 px-4 py-1.5 rounded transition w-28 h-10 text-sm"
+					[ngClass]="{
+						'border border-green-600 text-green-500 hover:bg-green-800 hover:border-green-800 hover:text-white': !isLoggedIn(),
+						'border border-red-600 text-red-500 hover:bg-red-600 hover:text-white': isLoggedIn()
+						}"
+					(click)="isLoggedIn() ? logOut() : showLoginForm()">
+				<svg class="w-5 h-5 stroke-current transition-transform"
+					[ngClass]="{ 'rotate-180': isLoggedIn() }"
+					fill="none" stroke-width="2" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round"
+						d="M15 12H3m0 0l4-4m-4 4l4 4m6-12v16"/>
+				</svg>
+				{{ isLoggedIn() ? 'Logout' : 'Login' }}
+			</button>
+		</div>
+	</ng-template>
+</p-menubar>

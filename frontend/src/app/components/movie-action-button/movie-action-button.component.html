@@ -1,0 +1,17 @@
+<button
+  (click)="onClick($event)"
+  [ngClass]="[
+    'flex items-center gap-2 px-3 py-1 rounded-full font-semibold',
+    'transition-all duration-200 cursor-pointer',
+    active ? pillBackgroundActive : pillBackgroundInactive,
+    active ? hoverClassActive : hoverClassInactive ]">
+  <svg
+    class="w-5 h-5 stroke-current transition-colors duration-300"
+    [ngClass]="active ? 'text-' + activeColor : 'text-' + inactiveColor"
+    fill="none"
+    stroke-width="2"
+    viewBox="0 0 24 24">
+    <path [attr.d]="active ? activePath : inactivePath" />
+  </svg>
+  <span>{{ label }}</span>
+</button>
